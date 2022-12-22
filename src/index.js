@@ -11,14 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 export let rerenderEntireTree = (state) => {
   root.render(
     <React.StrictMode>
-      <App
-        state={state}
-        dispatch={store.dispatch.bind(store)}
-        store={store}
-
-        // addMessage={store.addMessage.bind(store)}
-        // updateMessageText={store.updateMessageText.bind(store)}
-      />
+      <StoreContext.Provider value={store}>
+      <App />
+      </StoreContext.Provider>
     </React.StrictMode>
   );
 };
