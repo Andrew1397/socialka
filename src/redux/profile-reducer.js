@@ -8,30 +8,68 @@ let initialState = {
   newPostText: "Yap",
 };
 
-const profileReducer = (state = initialState, action) => {
-  if (action.type === "ADD-POST") {
-    let newPost = {
-      id: 5,
-      message: state.newPostText,
-      likesCount: 0,
-    };
-    state.postsData.push(newPost);
-    state.newPostText = "";
-  } else if (action.type === "UPDATE-NEW-POST-TEXT") {
-    state.newPostText = action.newText;
-  }
 
-  return state;
-};
 
-export const addPostActionCreator = () => {
-  return {
-    type: "ADD-POST",
+// const profileReducer = (state = initialState, action) => {
+//   if (action.type === "ADD-POST") {
+//     let newPost = {
+//       id: 5,
+//       message: state.newPostText,
+//       likesCount: 0,
+//     };
+//     let stateCopy = {...state}
+//     stateCopy.postsData = [...state.postsData]
+//     stateCopy.postsData.push(newPost);
+//     stateCopy.newPostText = "";
+//     return stateCopy;
+//   } else if (action.type === "UPDATE-NEW-POST-TEXT") {
+//     let stateCopy = {...state}
+//     stateCopy.postsData = [...state.postsData];
+//     stateCopy.newPostText = action.newText;
+//     return stateCopy;
+//   } 
+// };
+
+  const profileReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case "ADD-POST": {
+        let newPost = {
+          id: 5,
+          message: state.newPostText,
+          likesCount: 0,
+        };
+        // let stateCopy = { ...state };
+        // stateCopy.postsData = [...state.postsData];
+        // stateCopy.postsData.push(newPost);
+        // stateCopy.newPostText = "";
+        // return stateCopy;
+
+        return {
+          ...state, 
+          postsData: [...state.postsData, newPost], 
+          newPostText: ''
+        }
+      }
+      case "UPDATE-NEW-POST-TEXT": {
+        //         let stateCopy = { ...state };
+        //         stateCopy.postsData = [...state.postsData];
+        //         stateCopy.newPostText = action.newText;
+        //         return stateCopy;
+        return { ...state, newPostText: action.newText };
+      }
+      default:
+        return state;
+    }
   };
-};
 
-export const updateNewPostTextActionCreator = (text) => {
-  return { type: "UPDATE-NEW-POST-TEXT", newText: text };
-};
+  export const addPostActionCreator = () => {
+    return {
+      type: "ADD-POST",
+    };
+  };
 
-export default profileReducer;
+  export const updateNewPostTextActionCreator = (text) => {
+    return { type: "UPDATE-NEW-POST-TEXT", newText: text };
+  };
+
+  export default profileReducer;

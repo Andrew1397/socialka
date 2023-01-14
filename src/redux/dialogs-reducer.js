@@ -14,19 +14,61 @@ let initialState = {
   newMessageText: "fds",
 };
 
-const dialogReducer = (state = initialState, action) => {
-  if (action.type === "UPDATE-NEW-MESSAGE-TEXT") {
-    state.newMessageText = action.messageText;
-  } else if (action.type === "ADD-MESSAGE") {
-    let textMess = {
-      id: 5,
-      message: state.newMessageText,
-    };
-    state.messagesData.push(textMess);
-    state.newMessageText = "";
-  }
+// const dialogReducer = (state = initialState, action) => {
+//   if (action.type === "UPDATE-NEW-MESSAGE-TEXT") {
+//     state.newMessageText = action.messageText;
+//   } else if (action.type === "ADD-MESSAGE") {
+//     let textMess = {
+//       id: 5,
+//       message: state.newMessageText,
+//     };
+//     state.messagesData.push(textMess);
+//     state.newMessageText = "";
+//   }
+//   return state;
+// };
 
-  return state;
+const dialogReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "ADD-MESSAGE": {
+      // let textMess = {
+      //   id: 5,
+      //   message: state.newMessageText,
+      // };
+      // let stateCopy = { ...state };
+      // stateCopy.messagesData = [...state.messagesData];
+      // stateCopy.messagesData.push(textMess);
+      // stateCopy.newMessageText = "";
+      // return stateCopy;
+
+      //Код з курсу. Йобана залупа. Не розумію
+      //  let body = state.newMessageText;
+      //  return {
+      //    ...state,
+      //    newMessageText: "",
+      //    messagesData: [...state.messagesData, { id: 6, message: body }],
+      //  };
+
+      //Це я хоча б розумію
+      let textMess = {
+        id: 5,
+        message: state.newMessageText,
+      };
+      return {
+        ...state,
+        messagesData: [...state.messagesData, textMess],
+        newMessageText: "",
+      };
+    }
+    case "UPDATE-NEW-MESSAGE-TEXT": {
+      // let stateCopy = { ...state };
+      // stateCopy.newMessageText = action.messageText;
+      // return stateCopy;
+      return { ...state, newMessageText: action.messageText };
+    }
+    default:
+      return state;
+  }
 };
 
 export const updateNewMessageTextActionCreator = (mtext) => {

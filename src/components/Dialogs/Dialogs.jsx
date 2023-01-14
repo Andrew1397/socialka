@@ -8,8 +8,8 @@ const Dialogs = (props) => {
 
     //let state = props.dialogsPage
 
-    let dialogsElements = props.dialogsData.map((dialog) => <DialogItem name={dialog.name} id={dialog.id} />)
-    let messagesElements = props.messagesData.map((message) => <Message message={message.message} />)
+    let dialogsElements = props.dialogsPage.dialogsData.map((dialog) => <DialogItem name={dialog.name} key={dialog.id} id={dialog.id} />)
+    let messagesElements = props.dialogsPage.messagesData.map((message) => <Message message={message.message} key={message.id} />)
 
     let newMessageElement = React.createRef();
 
@@ -33,7 +33,7 @@ const Dialogs = (props) => {
                 <div>{messagesElements}</div>
                 <div>
                     <div>
-                        <textarea onChange={messageChange} ref={newMessageElement} value={props.newMessageText}></textarea>
+                        <textarea onChange={messageChange} ref={newMessageElement} value={props.dialogsPage.newMessageText}></textarea>
                     </div>
                     <div>
                         <button onClick={sendMessage}>Send</button>
@@ -43,6 +43,8 @@ const Dialogs = (props) => {
         </div>
     )
 }
+
+
 
 
 export default Dialogs;

@@ -1,0 +1,56 @@
+.userPhoto {
+    width: 100px;
+    height: 100px;
+}
+.user {
+    margin: 10px auto;
+    padding: 15px 100px;
+    border:3px solid rgb(31, 197, 31);
+    border-radius: 455px;
+    display: flex;
+    width: 500px;
+    background-image: linear-gradient(to bottom right, blue, yellow);
+    height: 130px;
+ 
+  
+}
+.userTextInfo{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    width: 500px;
+    padding-left: 25px;
+    
+    
+}
+
+.btnFrienss {
+    width: 100px;
+    height: 30px;
+    margin-top: 2px;
+    background-color: red;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btnFrienss:hover {
+    background-color: rgb(59, 223, 59);
+    color: white;
+}
+.btnFriens {
+    width: 100px;
+    height: 30px;
+    margin-top: 2px;
+    background-color: rgb(59, 223, 59);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btnFriens:hover {
+    background-color: red;
+    color: white;
+}
+
+.selectedPage{
+color: aqua;
+}
