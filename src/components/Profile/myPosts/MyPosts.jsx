@@ -19,6 +19,7 @@ const MyPosts = (props) => {
   }
 
   return (
+    <div className={s.content}>
     <div className={s.postsBlock}>
       <h3>My post</h3>
       <div>
@@ -32,6 +33,7 @@ const MyPosts = (props) => {
       <div className={s.posts}>
         {postsElements}
       </div>
+    </div>
     </div>
   )
 }

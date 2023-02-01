@@ -6,6 +6,7 @@ let initialState = {
     { id: 4, message: "Me", likesCount: 12 },
   ],
   newPostText: "Yap",
+  profile: null
 };
 
 
@@ -57,6 +58,11 @@ let initialState = {
         //         return stateCopy;
         return { ...state, newPostText: action.newText };
       }
+      case "SET-USER-PROFILE": {
+        return {
+          ...state, profile: action.profile
+        }
+      }
       default:
         return state;
     }
@@ -71,5 +77,8 @@ let initialState = {
   export const updateNewPostTextActionCreator = (text) => {
     return { type: "UPDATE-NEW-POST-TEXT", newText: text };
   };
+  export const setUserProfile = (profile) => {
+    return { type: "SET-USER-PROFILE", profile}
+  }
 
   export default profileReducer;

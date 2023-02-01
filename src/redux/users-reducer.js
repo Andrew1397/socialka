@@ -45,7 +45,7 @@ let initialState = {
   totalUsersCount: 0,
   currentPage: 1,
   pagesToShow: 200,
-  isFetcing: true
+  isFetcing: true,
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -78,21 +78,23 @@ const usersReducer = (state = initialState, action) => {
         users: action.users,
       };
     }
-    
+
     case "SET-CURRENT-PAGE": {
-      return{ ...state, currentPage: action.currentPage}
+      return { ...state, currentPage: action.currentPage };
     }
 
     case "SET-TOTAL-USERS-COUNT": {
       return {
-        ...state, totalUsersCount: action.count
-      }
+        ...state,
+        totalUsersCount: action.count,
+      };
     }
 
-    case 'TOGGLE-IS-FETCHING':{
+    case "TOGGLE-IS-FETCHING": {
       return {
-        ...state, isFetcing: action.isFetcing
-      }
+        ...state,
+        isFetcing: action.isFetcing,
+      };
     }
 
     default:
@@ -101,10 +103,7 @@ const usersReducer = (state = initialState, action) => {
 };
 // тут перед = було AC
 export const follow = (userID) => {
-  return {
-    type: "FOLLOW",
-    userID,
-  };
+  return { type: "FOLLOW", userID };
 };
 // тут перед = було AC
 export const unfollow = (userID) => {
@@ -124,6 +123,7 @@ export const setTotalUsersCount = (totalUsersCount) => {
 };
 // тут перед = було AC
 export const toggleIsFetching = (isFetcing) => {
-  return { type: "TOGGLE-IS-FETCHING" , isFetcing}};
+  return { type: "TOGGLE-IS-FETCHING", isFetcing };
+};
 
 export default usersReducer;

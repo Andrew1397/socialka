@@ -1,6 +1,7 @@
 import React from "react";
 import styles from './users.module.css'
 import userPhoto from '../../assets/imgs/user.jpg'
+import { NavLink } from "react-router-dom";
 
 let Users = (props) => {
 
@@ -17,14 +18,14 @@ let Users = (props) => {
 
     // let endIndex = pagesCount + (pagesToShow / 2);
     // let visiblePages = pages.slice(startIndex, endIndex);
-
+debugger
 
     return (
-        <div >
+        <div className={styles.content}>
             <div>
                 {pages.map(p => {
                     return (
-                        <span className={props.currentPage === p && styles.selectedPage} onClick={() => { props.onPageChanged(p) }}>{p}</span>
+                        <span key={p} className={props.currentPage === p && styles.selectedPage} onClick={() => { props.onPageChanged(p) }}>{p}</span>
                     )
                 })}
             </div>
@@ -34,7 +35,9 @@ let Users = (props) => {
                     <div className={styles.user}>
                         <span>
                             <div>
-                                <img src={u.photos.small != null ? u.photos.small : userPhoto} alt='' className={styles.userPhoto} />
+                                <NavLink to={'/profile/' + u.id}>
+                                    <img src={u.photos.small != null ? u.photos.small : userPhoto} alt='' className={styles.userPhoto} />
+                                </NavLink>
                             </div>
                             <div>
                                 {u.followed
@@ -58,8 +61,10 @@ let Users = (props) => {
                             </span>
                         </span>
                     </div>
+                    
                 </div>)
             }
+            {props.currentPage * props.pageSize < props.totalUsersCount && <button className={styles.addMore} onClick={() => props.onPageChanged(props.currentPage + 1)}>Показати ще</button>}
         </div>
     )
 }

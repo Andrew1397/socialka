@@ -1,7 +1,16 @@
 .postsBlock {
     padding: 10px;
+
+
 }
 
 .posts {
     margin-top: 10px;
+}
+
+.content {
+    width: 875px;
+    display: flex;
+    
+    margin: auto;
 }
