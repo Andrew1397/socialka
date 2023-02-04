@@ -54,6 +54,12 @@
 .selectedPage{
 color: aqua;
 }
-.addMore{
-    position: center;
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.paginationBlock{
+    display: flex;
+    justify-content: center;
 }

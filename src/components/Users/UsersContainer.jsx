@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { follow, setCurrentPage, setTotalUsersCount, setUsers, toggleIsFetching, unfollow } from "../../redux/users-reducer";
 import Users from "./Users";
 import Preloader from "./Preloader";
+import ReactPaginate from "react-paginate";
+import "./UC.module.css"
+
 
 const UsersContainer = () => {
   const dispatch = useDispatch();
@@ -18,26 +21,53 @@ const UsersContainer = () => {
   useEffect(() => {
     dispatch(toggleIsFetching(true))
     axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
-.then(response => {
-      dispatch(toggleIsFetching(false))
-      dispatch(setUsers(response.data.items))
-      dispatch(setTotalUsersCount(response.data.totalCount))
-    })
+      .then(response => {
+        dispatch(toggleIsFetching(false))
+        dispatch(setUsers(response.data.items))
+        dispatch(setTotalUsersCount(response.data.totalCount))
+      })
   }, [dispatch, currentPage, pageSize]);
 
   const onPageChanged = (pageNumber) => {
     dispatch(setCurrentPage(pageNumber))
     dispatch(toggleIsFetching(true))
     axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
-.then(response => {
-      dispatch(toggleIsFetching(false))
-      dispatch(setUsers(response.data.items))
-    })
+    .then(response => {
+        dispatch(toggleIsFetching(false))
+        dispatch(setUsers(response.data.items))
+        
+      })
+    console.log("data", pageNumber)
+    debugger
   }
-
+// let handlePageClick = (data) => {
+    //     console.log("data", data)
+    // }
   return (
     <>
       {isFetching ? <Preloader /> : null}
+      <ReactPaginate
+        previousLabel={'previous'}
+        nextLabel={'next'}
+        breakLabel={'...'}
+        breakClassName={'break-me'}
+        pageCount={Math.ceil(totalUsersCount / pageSize)}
+        marginPagesDisplayed={3}
+        pageRangeDisplayed={7}
+        onPageChange={(page) => onPageChanged(page.selected + 1)}
+        // onPageChange={ onPageChanged}
+        containerClassName={'pagination'}
+        subContainerClassName={'pages pagination'}
+        activeClassName={'active'}
+        // pageClassName={"page-item"}
+        // pageLinkClassName={"page-link"}
+        // previousClassName={"page-item"}
+        // previousLinkClassName={"page-link"}
+        // nextClassName={"page-item"}
+        // nextLinkClassName={"page-link"}
+        // breakClassName={"page-item"}
+        // breakLinkClassName={"page-link"}
+      />
       <Users totalUsersCount={totalUsersCount}
         pageSize={pageSize}
         currentPage={currentPage}
@@ -46,11 +76,92 @@ const UsersContainer = () => {
         pagesToShow={pagesToShow}
         follow={(userId) => dispatch(follow(userId))}
         unfollow={(userId) => dispatch(unfollow(userId))} />
+      
+      
     </>
   )
 }
 
 export default UsersContainer;
+
+
+
+// import React, { useEffect } from "react";
+// import axios from "axios";
+// import { useDispatch, useSelector } from "react-redux";
+// import { follow, setCurrentPage, setTotalUsersCount, setUsers, toggleIsFetching, unfollow } from "../../redux/users-reducer";
+// import Users from "./Users";
+// import Preloader from "./Preloader";
+// import ReactPagination from "../common/Pagination/Pagination";
+
+// const UsersContainer = () => {
+//   const dispatch = useDispatch();
+//   const { users, pageSize, totalUsersCount, currentPage, pagesToShow, isFetching } = useSelector(state => ({
+//     users: state.usersPage.users,
+//     pageSize: state.usersPage.pageSize,
+//     totalUsersCount: state.usersPage.totalUsersCount,
+//     currentPage: state.usersPage.currentPage,
+//     pagesToShow: state.usersPage.pagesToShow,
+//     isFetching: state.usersPage.isFetching
+//   }));
+//   useEffect(() => {
+//     dispatch(toggleIsFetching(true))
+//     axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
+// .then(response => {
+//       dispatch(toggleIsFetching(false))
+//       dispatch(setUsers(response.data.items));
+//       dispatch(setTotalUsersCount(response.data.totalCount));
+//     });
+//   }, [currentPage, dispatch, pageSize]);
+//   const onPageChanged = (pageNumber) => {
+//     dispatch(setCurrentPage(pageNumber));
+//   };
+ 
+//   return <>
+//     {isFetching ? <Preloader /> : null}
+//     <ReactPagination totalItemsCount={totalUsersCount}
+//       pageSize={pageSize}
+//       onPageChanged={onPageChanged}
+//       pagesToShow={pagesToShow}
+//       currentPage={currentPage} />
+//     <Users totalUsersCount={totalUsersCount}
+//       pageSize={pageSize}
+//       onPageChanged={onPageChanged}
+//       users={users}
+//       follow={follow}
+//       unfollow={unfollow} />
+//   </>
+// };
+
+// export default UsersContainer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // const [item, setItem] = useState([])
+
+  // const handlePageClick = (data) => {
+  //   console.log(data.selected)
+  // }
 
 // class UsersContainer extends React.Component {
 
