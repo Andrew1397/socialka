@@ -1,51 +1,49 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { follow, setCurrentPage, setTotalUsersCount, setUsers, toggleIsFetching, unfollow } from "../../redux/users-reducer";
+import { follow, setCurrentPage, setTotalUsersCount, setUsers, toggleFollowingProgress, toggleIsFetching, unfollow } from "../../redux/users-reducer";
 import Users from "./Users";
 import Preloader from "./Preloader";
 import ReactPaginate from "react-paginate";
 import "./UC.module.css"
+import { userAPI } from "../api/api";
 
 
 const UsersContainer = () => {
   const dispatch = useDispatch();
-  const { users, pageSize, totalUsersCount, currentPage, pagesToShow, isFetching } = useSelector(state => ({
+  const { users, pageSize, totalUsersCount, currentPage, pagesToShow, isFetcing, followingInProgress } = useSelector(state => ({
     users: state.usersPage.users,
     pageSize: state.usersPage.pageSize,
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
     pagesToShow: state.usersPage.pagesToShow,
-    isFetching: state.usersPage.isFetching
+    isFetcing: state.usersPage.isFetcing,
+    followingInProgress: state.usersPage.followingInProgress
+    
   }));
   useEffect(() => {
     dispatch(toggleIsFetching(true))
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
-      .then(response => {
-        dispatch(toggleIsFetching(false))
-        dispatch(setUsers(response.data.items))
-        dispatch(setTotalUsersCount(response.data.totalCount))
-      })
+    userAPI.getUsers(currentPage, pageSize).then(data =>{
+      dispatch(toggleIsFetching(false))
+      dispatch(setUsers(data.items))
+      dispatch(setTotalUsersCount(data.totalCount))
+    })
   }, [dispatch, currentPage, pageSize]);
 
   const onPageChanged = (pageNumber) => {
     dispatch(setCurrentPage(pageNumber))
     dispatch(toggleIsFetching(true))
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
-    .then(response => {
+    userAPI.getUsers(currentPage, pageSize).then(data => {
         dispatch(toggleIsFetching(false))
-        dispatch(setUsers(response.data.items))
-        
+        dispatch(setUsers(data.items))
+        debugger
       })
     console.log("data", pageNumber)
     debugger
   }
-// let handlePageClick = (data) => {
-    //     console.log("data", data)
-    // }
+
   return (
     <>
-      {isFetching ? <Preloader /> : null}
+      {isFetcing ? <Preloader /> : null}
       <ReactPaginate
         previousLabel={'previous'}
         nextLabel={'next'}
@@ -55,18 +53,10 @@ const UsersContainer = () => {
         marginPagesDisplayed={3}
         pageRangeDisplayed={7}
         onPageChange={(page) => onPageChanged(page.selected + 1)}
-        // onPageChange={ onPageChanged}
         containerClassName={'pagination'}
         subContainerClassName={'pages pagination'}
         activeClassName={'active'}
-        // pageClassName={"page-item"}
-        // pageLinkClassName={"page-link"}
-        // previousClassName={"page-item"}
-        // previousLinkClassName={"page-link"}
-        // nextClassName={"page-item"}
-        // nextLinkClassName={"page-link"}
-        // breakClassName={"page-item"}
-        // breakLinkClassName={"page-link"}
+
       />
       <Users totalUsersCount={totalUsersCount}
         pageSize={pageSize}
@@ -75,7 +65,10 @@ const UsersContainer = () => {
         users={users}
         pagesToShow={pagesToShow}
         follow={(userId) => dispatch(follow(userId))}
-        unfollow={(userId) => dispatch(unfollow(userId))} />
+        unfollow={(userId) => dispatch(unfollow(userId))} 
+        toggleFollowingProgress={toggleFollowingProgress}
+        followingInProgress={followingInProgress}
+        />
       
       
     </>

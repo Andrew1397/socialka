@@ -46,6 +46,7 @@ let initialState = {
   currentPage: 1,
   pagesToShow: 10,
   isFetcing: true,
+  followingInProgress: [],
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -97,6 +98,16 @@ const usersReducer = (state = initialState, action) => {
       };
     }
 
+    case "TOGGLE-IS-FOLLOWING-PROGRESS": {
+      
+      return {
+        ...state,
+        followingInProgress: action.isFetcing
+          ? [...state.followingInProgress, action.userId]
+          : state.followingInProgress.filter((id) => id !== action.userId),
+      };
+    }
+
     default:
       return state;
   }
@@ -124,6 +135,10 @@ export const setTotalUsersCount = (totalUsersCount) => {
 // тут перед = було AC
 export const toggleIsFetching = (isFetcing) => {
   return { type: "TOGGLE-IS-FETCHING", isFetcing };
+};
+
+export const toggleFollowingProgress = (isFetcing, userId) => {
+  return { type: "TOGGLE-IS-FOLLOWING-PROGRESS", isFetcing, userId };
 };
 
 export default usersReducer;

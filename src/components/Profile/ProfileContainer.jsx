@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 // import {  useDispatch, useSelector } from 'react-redux';
 import Profile from './Profile';
 // import { setUserProfile } from "../../redux/profile-reducer";
-// import { useParams}  from "react-router-dom"
+import { useParams}  from "react-router-dom"
 import axios from 'axios';
 // import { setUserProfile } from '../../redux/profile-reducer';
 
@@ -34,19 +34,27 @@ import axios from 'axios';
 // export default connect(mapStateToProps, { setUserProfile })(ProfileContainer)
 
 
+
 // робить
 function ProfileContainer() {
-    const [profile, setProfile] = useState({});
+    const [profile, setUserProfile] = useState({});
+    
     const [isLoading, setIsLoading] = useState(true);
+    let { userId } = useParams();
+    
 
     useEffect(() => {
+        debugger
+       
         axios
-            .get(`https://social-network.samuraijs.com/api/1.0/profile/2`)
+            .get(`https://social-network.samuraijs.com/api/1.0/profile/`+ userId)
+            
             .then((response) => {
-                setProfile(response.data);
+                debugger
+                setUserProfile(response.data);
                 setIsLoading(false);
             });
-    }, []);
+    }, [userId]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -65,6 +73,7 @@ function ProfileContainer() {
 //         fetch(`https://social-network.samuraijs.com/api/1.0/profile/` + id)
 //             .then(response => response.json())
 //             .then(data => {
+//                 debugger
 //                 dispatch(setUserProfile(data));
 //             });
 //     }, [dispatch, userId]);
