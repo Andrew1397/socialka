@@ -1,11 +1,13 @@
-// import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-
-// import {  useDispatch, useSelector } from 'react-redux';
 import Profile from './Profile';
-// import { setUserProfile } from "../../redux/profile-reducer";
-import { useParams}  from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
+import { getUserProfile, setUserProfileThunk } from '../../redux/profile-reducer';
+import { profile, profileThunk, toggleIsFetching } from '../../redux/profile-reducer';
+import { userAPI } from '../api/api';
 import axios from 'axios';
+import Preloader from '../common/Preloader/Preloader';
+import { useDispatch, useSelector } from 'react-redux';
+import { withAuthRedirect } from '../hoc/withAuthRedirect';
 // import { setUserProfile } from '../../redux/profile-reducer';
 
 
@@ -36,89 +38,62 @@ import axios from 'axios';
 
 
 // робить
-function ProfileContainer() {
-    const [profile, setUserProfile] = useState({});
-    
-    const [isLoading, setIsLoading] = useState(true);
-    let { userId } = useParams();
-    
+// обов'язково isLoading що б спочатку отримати дані а потім відмалювати сторінку
+function ProfileContainer(props) {
+  // const [profile, setUserProfile] = useState({});
+  // const [isFetching, toggleIsFetching] = useState(true)
+  let { userId } = useParams();
+  const profile = useSelector(state => state.profilePage.profile);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
+  const {isFetcing } = useSelector(state => ({
+
+    isFetcing: state.usersPage.isFetcing
+
+  }));
+
+  useEffect(() => {
+   if (!userId) {
+            dispatch(getUserProfile(16371));
+        } else {
+            dispatch(getUserProfile(userId));
+        }
         debugger
-       
-        axios
-            .get(`https://social-network.samuraijs.com/api/1.0/profile/`+ userId)
-            
-            .then((response) => {
-                debugger
-                setUserProfile(response.data);
-                setIsLoading(false);
-            });
-    }, [userId]);
+    // dispatch(profile(userId)) 
+    // userAPI.profile(userId).then((data) => {
+    // userAPI.getProfile(userId).then((data) => {
+    // // axios.get(`https://social-network.samuraijs.com/api/1.0/profile/` + userId).then((response) => {
+    //     //     debugger
+    //     setUserProfile(data);
+    //     toggleIsFetching(false);
+    //   });
+    // toggleIsFetching(true);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-    return <Profile profile={profile} />;
+    // dispatch(profile(userId))
+    // userAPI.profile(userId).then((data) => {
+    //   setUserProfile(data);
+    //   toggleIsFetching(false);
+    // });
+  }, [dispatch, userId]);
+
+  // if (isFetching) {
+  //   <div><Preloader /></div>
+  // }
+
+
+  // let AuthRedirectComponent = (props) => {
+  //   if (!props.isAuth) return <Navigate to="/login" />
+  //   return <ProfileContainer {...props}/>
+  // }
+
+  // { isFetcing ? <Preloader /> : null }
+  
+  return <>
+    {isFetcing ? <Preloader /> : <Profile profile={profile} />}
+    ;
+  </>
 }
+const AuthRedirectComponent = withAuthRedirect(ProfileContainer);
 
 
-// const ProfileContainer = () => {
-//     const dispatch = useDispatch();
-//     const { userId } = useParams();
-//     const profile = useSelector(state => state.profilePage.profile);
-
-//     useEffect(() => {
-//         let id = userId
-//         fetch(`https://social-network.samuraijs.com/api/1.0/profile/` + id)
-//             .then(response => response.json())
-//             .then(data => {
-//                 debugger
-//                 dispatch(setUserProfile(data));
-//             });
-//     }, [dispatch, userId]);
-
-//     return (
-//         <Profile profile={profile} />
-//     );}
-
-
-
-// function ProfileContainer(props) {
-
-//     const profile1 = useState(props => props.profile)
-    
-//     const profile = useSelector(state => state.profilePage.profile)
-//     const {id} = useParams();
-//     console.log(useParams)
-//     // const location = useLocation()
-//     useEffect(() => {
-        
-//         fetch(`https://social-network.samuraijs.com/api/1.0/profile/`+ id)
-            
-//         .then(response => {
-//                 props.setUserProfile(response.data)
-//             debugger
-//             })
-//     })       //Порожній масив для того що б цей хук виконувався лише при монтуванні компонента
-    
-    
-//     return (
-        
-//         <Profile {...props} profile={profile1[id]} />
-//     )
-
-
-
-
-// }
-
-    
-
-
-//let WithUrlDataContainerComponent = withRouter(ProfileContainer)
-
-
- 
-
-export default ProfileContainer;
+export default AuthRedirectComponent;

@@ -1,3 +1,6 @@
+import { userAPI } from "../components/api/api";
+import { toggleIsFetching } from "./users-reducer";
+
 let initialState = {
   postsData: [
     { id: 1, message: "Deamon", likesCount: 6 },
@@ -80,5 +83,26 @@ let initialState = {
   export const setUserProfile = (profile) => {
     return { type: "SET-USER-PROFILE", profile}
   }
+
+  // export const setUserProfileThunk = (userId) => {
+  //   return (dispatch) => {
+  //     dispatch(toggleIsFetching(true));
+  //     userAPI.profile(userId).then((data) => {
+  //       dispatch(setUserProfile(data));
+  //       dispatch(toggleIsFetching(false));
+  //     });
+  //   }
+  // }
+
+  export const getUserProfile = (userId) => {
+    return (dispatch) => {
+      dispatch(toggleIsFetching(true));
+      userAPI.getProfile(userId)
+        .then((data) => {
+          dispatch(setUserProfile(data));
+          dispatch(toggleIsFetching(false));
+        });
+    };
+  };
 
   export default profileReducer;

@@ -1,4 +1,5 @@
 import React from "react"
+import { Navigate} from "react-router-dom";
 import DialogItem from "./DialogItem/DialogsItem"
 import s from "./Dialogs.module.css"
 import Message from "./Message/Message"
@@ -21,7 +22,8 @@ const Dialogs = (props) => {
         let mtext = newMessageElement.current.value;
         props.updateMessageText(mtext)
     }
-
+    
+    
 
     return (
         <div className={s.dialogs}>
