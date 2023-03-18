@@ -5,6 +5,8 @@ import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
 import ReactPaginate from "react-paginate";
 import "./UC.module.css"
+import { compose } from "redux";
+import { withAuthRedirect } from "../hoc/withAuthRedirect";
 
 
 const UsersContainer = () => {
@@ -63,6 +65,6 @@ const UsersContainer = () => {
   )
 }
 
-export default UsersContainer;
+export default compose(withAuthRedirect)(UsersContainer);
 
 

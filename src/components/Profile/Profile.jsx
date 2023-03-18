@@ -7,7 +7,7 @@ const Profile = (props) => {
     debugger
     return (
         <div>
-            <ProfileInfo profile={props.profile}/>
+            <ProfileInfo profile={props.profile} status={props.status}/>
             <MyPostsContainer />
         </div>
     )

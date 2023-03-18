@@ -24,19 +24,27 @@ export const userAPI = {
       return response.data;
     });
   },
+};
+
+export const profileAPI = {
   getProfile(userId) {
-    debugger
     return instance.get(`profile/` + userId).then((response) => {
-      debugger
       return response.data;
     });
+  },
+  getStatus(userId) {
+    return instance.get(`profile/status/` + userId)
+  },
+  updateStatus(status) {
+    return instance.put(`profile/status/`, {status: status})
+    ;
   },
 };
 
 export const authAPI = {
   me() {
-    return instance.get('auth/me').then((response) => {
-      return response.data
-    })
-  }
-}
+    return instance.get("auth/me").then((response) => {
+      return response.data;
+    });
+  },
+};

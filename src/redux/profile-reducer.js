@@ -1,4 +1,4 @@
-import { userAPI } from "../components/api/api";
+import { profileAPI, userAPI } from "../components/api/api";
 import { toggleIsFetching } from "./users-reducer";
 
 let initialState = {
@@ -9,7 +9,8 @@ let initialState = {
     { id: 4, message: "Me", likesCount: 12 },
   ],
   newPostText: "Yap",
-  profile: null
+  profile: null,
+  status: "",
 };
 
 
@@ -61,6 +62,11 @@ let initialState = {
         //         return stateCopy;
         return { ...state, newPostText: action.newText };
       }
+      case "SET-STATUS": {
+        return {
+          ...state, status: action.status
+        }
+      }
       case "SET-USER-PROFILE": {
         return {
           ...state, profile: action.profile
@@ -83,6 +89,9 @@ let initialState = {
   export const setUserProfile = (profile) => {
     return { type: "SET-USER-PROFILE", profile}
   }
+  export const setStatus = (status) => {
+    return { type: "SET-STATUS", status}
+  }
 
   // export const setUserProfileThunk = (userId) => {
   //   return (dispatch) => {
@@ -97,12 +106,38 @@ let initialState = {
   export const getUserProfile = (userId) => {
     return (dispatch) => {
       dispatch(toggleIsFetching(true));
-      userAPI.getProfile(userId)
+      profileAPI.getProfile(userId)
         .then((data) => {
           dispatch(setUserProfile(data));
           dispatch(toggleIsFetching(false));
         });
     };
   };
+  export const getStatus = (userId) => {
+    return (dispatch) => {
+      dispatch(toggleIsFetching(true));
+      profileAPI.getStatus(userId)
+        .then((response) => {
+          debugger
+          dispatch(setStatus(response));
+          dispatch(toggleIsFetching(false));
+        });
+    };
+  };
+  export const updateStatus = (status) => {
+    return (dispatch) => {
+      dispatch(toggleIsFetching(true));
+      profileAPI.updateStatus(status)
+        .then((response) => {
+          console.log("response",response)
+          if ( response.resultCode===0){dispatch(setStatus(response));}
+          dispatch(toggleIsFetching(false));
+        });
+    };
+  };
+
+  
+
+
 
   export default profileReducer;

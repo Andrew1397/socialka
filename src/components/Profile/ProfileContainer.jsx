@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Profile from './Profile';
 import { Navigate, useParams } from "react-router-dom"
-import { getUserProfile, setUserProfileThunk } from '../../redux/profile-reducer';
+import { getStatus, getUserProfile, setUserProfileThunk } from '../../redux/profile-reducer';
 import { profile, profileThunk, toggleIsFetching } from '../../redux/profile-reducer';
 import { userAPI } from '../api/api';
 import axios from 'axios';
 import Preloader from '../common/Preloader/Preloader';
 import { useDispatch, useSelector } from 'react-redux';
 import { withAuthRedirect } from '../hoc/withAuthRedirect';
+import { compose } from 'redux';
 // import { setUserProfile } from '../../redux/profile-reducer';
 
 
@@ -48,16 +49,19 @@ function ProfileContainer(props) {
 
   const {isFetcing } = useSelector(state => ({
 
-    isFetcing: state.usersPage.isFetcing
+    isFetcing: state.usersPage.isFetcing,
+    status: state.profilePage.status
 
   }));
 
   useEffect(() => {
+    
    if (!userId) {
             dispatch(getUserProfile(16371));
         } else {
             dispatch(getUserProfile(userId));
         }
+    dispatch(getStatus(userId))
         debugger
     // dispatch(profile(userId)) 
     // userAPI.profile(userId).then((data) => {
@@ -89,46 +93,49 @@ function ProfileContainer(props) {
   // { isFetcing ? <Preloader /> : null }
   
   return <>
-    {isFetcing ? <Preloader /> : <Profile profile={profile} />}
+    {isFetcing ? <Preloader /> : <Profile profile={profile} status={props.status}/>}
     ;
   </>
 }
-const AuthRedirectComponent = withAuthRedirect(ProfileContainer);
+// const AuthRedirectComponent = withAuthRedirect(ProfileContainer);
 
 
-export default AuthRedirectComponent;
+// export default AuthRedirectComponent;
+export default ProfileContainer;
+
+// export default compose(withAuthRedirect)(ProfileContainer)
 
 // import React, { useEffect } from 'react';
 // import Profile from './Profile';
-// import { useLocation, useNavigate } from "react-router-dom" // імпортуємо хуки useLocation і useNavigate з react-router-dom
-// import { getUserProfile } from '../../redux/profile-reducer'; // імпортуємо екшн-кріейтор для отримання профілю користувача
-// import Preloader from '../common/Preloader/Preloader'; // імпортуємо компонент Preloader для відображення завантаження
-// import { useDispatch, useSelector } from 'react-redux'; // імпортуємо хуки useDispatch і useSelector з react-redux
-// import { withAuthRedirect } from '../hoc/withAuthRedirect'; // імпортуємо вищий компонент withAuthRedirect для перевірки авторизації
+// import { useLocation, useNavigate } from "react-router-dom" 
+// import { getUserProfile } from '../../redux/profile-reducer'; 
+// import Preloader from '../common/Preloader/Preloader'; 
+// import { useDispatch, useSelector } from 'react-redux'; 
+// import { withAuthRedirect } from '../hoc/withAuthRedirect'; 
 
 // function ProfileContainer(props) {
 //   const location = useLocation(); // отримуємо об'єкт location з url
 //   const navigate = useNavigate(); // отримуємо функцію navigate для навігації
 //   const userId = location.pathname.split('/')[2]; // витягуємо userId з url за допомогою розбиття рядка на масив
-//   const profile = useSelector(state => state.profilePage.profile); // отримуємо дані про профіль користувача з redux store за допомогою хука useSelector
-//   const isFetching = useSelector(state => state.usersPage.isFetching); // отримуємо статус завантаження даних з redux store за допомогою хука useSelector
-//   const dispatch = useDispatch(); // отримуємо функцію dispatch з redux store за допомогою хука useDispatch
+//   const profile = useSelector(state => state.profilePage.profile); 
+//   const isFetching = useSelector(state => state.usersPage.isFetching); 
+//   const dispatch = useDispatch(); 
 
 //   useEffect(() => {
 //    if (!userId) {
-//             navigate('/profile/16371'); // якщо userId не вказано, то перенаправляємо на сторінку профілю за замовчуванням за допомогою функції navigate
+//             navigate('/profile/16371');
 //         } else {
-//             dispatch(getUserProfile(userId)); // якщо userId вказано, то викликаємо екшн-кріейтор getUserProfile з userId як параметром і передаємо його в функцію dispatch
+//             dispatch(getUserProfile(userId)); 
 //         }
 //   }, [dispatch, userId, navigate]); // оновлюємо ефект при зміні dispatch, userId або navigate
 
 //   return (
 //     <>
 //       {isFetching ? <Preloader /> : <Profile profile={profile} />} 
-//       {/* // якщо isFetching - правда, то рендеримо компонент Preloader, якщо ні - то рендеримо компонент Profile з пропсом profile */}
+//       
 //     </>
 //   );
 // }
-// const AuthRedirectComponent = withAuthRedirect(ProfileContainer); // обгортаємо компонент ProfileContainer вищим компонентом withAuthRedirect для перевірки авторизації
+// const AuthRedirectComponent = withAuthRedirect(ProfileContainer); 
 
-// export default AuthRedirectComponent; // експортуємо результат обгортання як компонент за замовчуванням
+// export default AuthRedirectComponent; 

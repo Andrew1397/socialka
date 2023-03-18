@@ -1,6 +1,7 @@
 import React from "react";
 import s from "./ProfileInfo.module.css"
 import userPhoto from '../../../assets/imgs/user.jpg'
+import ProfileStatus from "./ProfileStatus";
 
 const ProfileInfo = (props) => {
 debugger
@@ -22,7 +23,7 @@ if (props.profile!=null && Object.entries(props.profile).length>0)
                         
                         <div>
                             <p>{props.profile.fullName}</p>
-
+                            <ProfileStatus status={props.status}/>
                             Про мене: {props.profile.aboutMe}
                         </div>
                     </div>
